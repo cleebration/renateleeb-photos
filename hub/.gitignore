@@ -1,6 +1,10 @@
 node_modules/
 raw-media/*
 !raw-media/.gitkeep
-public/media/*
-!public/media/.gitkeep
 *.log
+
+# ACHTUNG, Abweichung vom Galerie-Kit:
+# Im Kit ist public/media/* ignoriert, weil der Hub die Bilder beim Deploy
+# selbst aus raw-media erzeugt. Hier baut Cloudflare die Seite OHNE die
+# Originale — die verkleinerten Bilder müssen also ins Repo, sonst steht
+# die Galerie leer.  (Genau das ist beim ersten Push passiert.)

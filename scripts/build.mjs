@@ -486,3 +486,18 @@ console.log(
   `OK  ${urls.length} Seiten + 404 · ${nFeed} Feed-Datei(en) · ${nMedia} Bild(er) · ${nAssets} Asset(s)` +
     (items.length ? ` · ${items.length} Medien im Feed` : " · ⚠ Feed leer (hub bauen!)"),
 );
+
+// Reißleine: lieber ein roter Build als eine live geschaltete leere Galerie.
+// Beim ersten Push fehlten die Bilder, weil hub/.gitignore (aus dem Kit)
+// public/media ausschließt — das fiel erst auf der fertigen Seite auf.
+const erwartet = items.filter((it) => (it.image || "").startsWith("/media/"));
+const fehlend = erwartet.filter((it) => !fs.existsSync(path.join(DIST, it.image.replace(/^\//, ""))));
+if (fehlend.length) {
+  console.error(
+    `\nFEHLER: ${fehlend.length} von ${erwartet.length} Bildern fehlen in dist/media/.\n` +
+      `Fehlt z. B.: ${fehlend.slice(0, 3).map((i) => i.image).join(", ")}\n` +
+      `Lokal hilft "npm run images". Auf dem Server bedeutet es, dass die Bilder\n` +
+      `nicht im Repo liegen — hub/public/media/ gehört committet.`,
+  );
+  process.exit(1);
+}
