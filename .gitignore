@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.DS_Store
+.wrangler/
+.dev.vars
+
+# Originale bleiben lokal — ausgeliefert werden die verkleinerten Bilder
+# aus hub/public/media (die gehören ins Repo).
+hub/raw-media/*
+!hub/raw-media/.gitkeep

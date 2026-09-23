@@ -1,0 +1,6 @@
+node_modules/
+raw-media/*
+!raw-media/.gitkeep
+public/media/*
+!public/media/.gitkeep
+*.log

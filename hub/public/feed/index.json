@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-09-22T23:29:46.214Z",
+  "sites": [
+    {
+      "key": "renateleeb",
+      "label": "Renate Leeb — Fotografie",
+      "count": 53
+    }
+  ],
+  "galleries": [
+    {
+      "key": "kuenstlernatur",
+      "label": "Künstlernatur · Naturkünstler",
+      "intro": "Makroaufnahmen von Blüten, Blättern und Wasser — die Natur als Gestalterin, gesehen aus nächster Nähe.",
+      "defaultSites": [
+        "renateleeb"
+      ],
+      "count": 53
+    }
+  ],
+  "tags": [
+    {
+      "key": "motiv",
+      "label": "Motive",
+      "color": "#46592c"
+    },
+    {
+      "key": "collage",
+      "label": "Collagen",
+      "color": "#7a6a3c"
+    }
+  ],
+  "locales": [
+    "de"
+  ],
+  "defaultLocale": "de",
+  "translationProgress": {
+    "de": {
+      "uebersetzt": 53,
+      "gesamt": 53
+    }
+  },
+  "total": 53
+}

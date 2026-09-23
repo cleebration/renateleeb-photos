@@ -1,0 +1,23 @@
+{
+  "name": "renateleeb-photos",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // Der Worker entscheidet zuerst — sonst beantwortet die Asset-Schicht
+    // Adressen, für die es eine Weiterleitung gibt.
+    "run_worker_first": true
+  },
+  "observability": { "enabled": true },
+  "vars": {
+    "KONTAKT_EMPFAENGER": "kontakt@renateleeb.photos"
+  }
+  // Geheimnisse NICHT hier eintragen, sondern:
+  //   npx wrangler secret put FORM_WEBHOOK_URL     (Zapier Catch Hook)
+  //   npx wrangler secret put RESEND_API_KEY       (Alternative: Resend)
+  // Die Domain wird nach dem DNS-Umzug ergänzt:
+  //   "routes": [{ "pattern": "renateleeb.photos", "custom_domain": true },
+  //              { "pattern": "www.renateleeb.photos", "custom_domain": true }]
+}

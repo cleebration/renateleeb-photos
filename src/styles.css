@@ -1,0 +1,255 @@
+/* ===========================================================================
+   renateleeb.photos — Design „Herbarium"
+   Papierton mit Grünstich, Moos als Akzent. Die Fotos sind die einzige
+   echte Farbe; alles andere hält sich zurück.
+   =========================================================================== */
+
+:root {
+  --paper: #ecefe7;
+  --paper-2: #f4f6f0;
+  --paper-3: #e3e7db;
+  --ink: #1f231c;
+  --muted: #6c7064;
+  --line: #cdd2c4;
+  --accent: #46592c;
+  --accent-ink: #34461f;
+  --accent-wash: #e2e8d6;
+  --warn: #8a3324;
+
+  --maxw: 1180px;
+  --read: 66ch;
+  --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --sans: "Karla", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--accent-ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+.eyebrow {
+  font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 12px;
+}
+
+/* --- Kopf ---------------------------------------------------------------- */
+.mast {
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+.mast-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap; padding-block: 15px;
+}
+.brand {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 500;
+  text-decoration: none; color: var(--ink); letter-spacing: .01em;
+}
+.brand span { color: var(--accent); }
+.mast-nav { display: flex; gap: 26px; font-size: 14.5px; }
+.mast-nav a { color: var(--muted); text-decoration: none; padding-block: 4px; }
+.mast-nav a:hover { color: var(--ink); }
+.mast-nav a[aria-current="page"] { color: var(--ink); box-shadow: inset 0 -1px 0 var(--accent); }
+
+.nav-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.nav-burger { display: none; cursor: pointer; padding: 6px 2px; }
+.nav-burger span { display: block; width: 22px; height: 2px; background: var(--ink); margin: 4px 0; }
+
+/* --- Hero ---------------------------------------------------------------- */
+.hero { padding-block: 60px 30px; }
+.hero h1 {
+  font-family: var(--serif); font-weight: 400; font-optical-sizing: auto;
+  font-size: clamp(2.7rem, 6.4vw, 4.6rem); line-height: 1.02; font-weight: 500;
+  letter-spacing: -.015em; margin: 0 0 .35em; max-width: 16ch;
+  text-wrap: balance;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero .lede {
+  font-size: clamp(1.02rem, 1.7vw, 1.16rem); color: var(--muted);
+  max-width: 52ch; margin: 0;
+}
+.hero--schmal { padding-block: 52px 22px; }
+
+/* Titel-Lockup der Galerie: gespiegeltes Wortpaar */
+.lockup {
+  font-family: var(--serif); font-weight: 400; line-height: .98;
+  font-size: clamp(2.5rem, 6.6vw, 4.4rem); margin: 0 0 .4em; letter-spacing: -.015em; font-weight: 500;
+}
+.lockup .l1, .lockup .l2 { display: block; }
+.lockup .l2 { color: var(--accent); margin-left: clamp(0px, 4vw, 64px); font-style: italic; }
+.lockup .dot { color: var(--accent); padding: 0 .06em; }
+
+/* --- Abschnitte ---------------------------------------------------------- */
+section { padding-block: 0 44px; }
+h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  letter-spacing: -.01em; margin: 0 0 .5em;
+}
+h3 { font-family: var(--serif); font-weight: 600; font-size: 1.32rem; margin: 0 0 .4em; }
+.read { max-width: var(--read); }
+.read h3 { margin-top: 1.8em; }
+.read p { margin: 0 0 1.15em; }
+.rule { border: 0; border-top: 1px solid var(--line); margin-block: 34px; }
+section.band { padding-bottom: 12px; }
+
+/* --- Kacheln (Startseite) ------------------------------------------------ */
+.cards { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.card {
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 24px; text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: border-color .2s, transform .2s;
+}
+.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.card p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.card .more { margin-top: auto; padding-top: 14px; font-size: 14.5px; color: var(--accent-ink); }
+
+/* Vorschau-Streifen der Galerie */
+.strip {
+  display: grid; gap: 10px; margin-block: 8px 6px;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 620px) { .strip { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 900px) { .strip { grid-template-columns: repeat(6, 1fr); } }
+.strip a { display: block; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 2px; background: var(--paper-3); }
+.strip img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.strip a:hover img { transform: scale(1.05); }
+
+/* --- Über mich ----------------------------------------------------------- */
+.portrait-row { display: grid; gap: 34px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) {
+  .portrait-row { grid-template-columns: 320px minmax(0, 1fr); gap: 52px; }
+  .portrait-row figure { position: sticky; top: 100px; }
+}
+.portrait-row figure { margin: 0; }
+/* height: auto ist nötig — sonst gewinnt das height-Attribut des Bildes
+   und das Porträt wird in die Länge gezogen. */
+.portrait-row img { border-radius: var(--radius); border: 1px solid var(--line); width: 100%; height: auto; }
+.portrait-row figcaption { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+blockquote.pull {
+  font-family: var(--serif); font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.34;
+  font-style: italic; color: var(--accent-ink); border-left: 2px solid var(--accent);
+  margin: 1.8em 0 0; padding: .1em 0 .1em 1.1em; max-width: 44ch;
+}
+
+/* --- Galerie-Modul (Theme über Tokens) ----------------------------------- */
+gallery-grid, gallery-detail {
+  --gal-bg: transparent;
+  --gal-ink: var(--ink);
+  --gal-muted: var(--muted);
+  --gal-line: var(--line);
+  --gal-accent: var(--accent);
+  --gal-font-display: var(--serif);
+  --gal-font-body: var(--sans);
+  --gal-aspect: 1 / 1;
+  --gal-tile: 240px;
+  --gal-radius: 2px;
+  display: block;
+}
+
+/* --- Kontaktseite -------------------------------------------------------- */
+.kontakt-row { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) {
+  .kontakt-row { grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr); gap: 44px; }
+}
+
+form.kontakt {
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: clamp(20px, 3vw, 32px);
+  display: grid; gap: 18px;
+}
+.feldpaar { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 560px) { .feldpaar { grid-template-columns: 1fr 1fr; } }
+.feld { display: grid; gap: 6px; }
+.feld label { font-size: 13.5px; letter-spacing: .02em; color: var(--muted); }
+.feld input, .feld textarea {
+  width: 100%; font: inherit; color: inherit; background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 11px 13px;
+  transition: border-color .15s, background .15s;
+}
+.feld input:hover, .feld textarea:hover { border-color: #b9c0ac; }
+.feld input:focus, .feld textarea:focus {
+  border-color: var(--accent); background: var(--paper-2); outline: none;
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+.feld textarea { min-height: 150px; resize: vertical; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.consent { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start;
+  font-size: 14px; color: var(--muted); }
+.consent input[type="checkbox"] {
+  width: 17px; height: 17px; margin: 3px 0 0; accent-color: var(--accent); flex: none;
+}
+.aktionen { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+button.send {
+  font: inherit; cursor: pointer; border: 1px solid var(--accent);
+  background: var(--accent); color: var(--paper-2); padding: 11px 24px; border-radius: var(--radius);
+  transition: background .15s, border-color .15s;
+}
+button.send:hover { background: var(--accent-ink); border-color: var(--accent-ink); }
+button.send[disabled] { opacity: .55; cursor: default; }
+.formnote { margin: 0; font-size: 14.5px; color: var(--muted); }
+.formnote:empty { display: none; }
+.formnote.ok { color: var(--accent-ink); }
+.formnote.err { color: var(--warn); }
+
+.kontakt-aside {
+  border-top: 2px solid var(--accent); background: var(--paper-2);
+  border-radius: var(--radius); padding: 24px;
+  display: grid; gap: 22px; font-size: 15.5px;
+}
+.kontakt-aside .block { display: grid; gap: 4px; }
+.kontakt-aside .label {
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+}
+.kontakt-aside a { color: var(--accent-ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.kontakt-aside p { margin: 0; color: var(--muted); }
+.kontakt-aside .links { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* --- Rechtstexte --------------------------------------------------------- */
+.rechtstext h3 { margin-top: 2em; }
+.rechtstext h3:first-child { margin-top: 0; }
+
+/* --- Fuß ----------------------------------------------------------------- */
+footer.site {
+  border-top: 1px solid var(--line); margin-top: 56px; padding-block: 26px 40px;
+  font-size: 13.5px; color: var(--muted);
+}
+footer.site .frow { display: flex; gap: 18px; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+footer.site a { color: var(--muted); text-decoration: none; }
+footer.site a:hover { color: var(--ink); }
+footer.site nav { display: flex; gap: 16px; flex-wrap: wrap; }
+.credit { display: inline-flex; align-items: center; gap: 6px; }
+
+@media (max-width: 760px) {
+  .mast-nav {
+    display: none; width: 100%; flex-direction: column; gap: 14px; padding-bottom: 10px;
+  }
+  .nav-toggle:checked ~ .mast-nav { display: flex; }
+  .nav-burger { display: block; }
+  .hero { padding-block: 40px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
