@@ -13,11 +13,18 @@
   "observability": { "enabled": true },
   "vars": {
     "KONTAKT_EMPFAENGER": "kontakt@renateleeb.photos"
-  }
+  },
+  // Die eigene Domain. „custom_domain" heißt: Cloudflare pflegt den
+  // DNS-Eintrag selbst — deshalb darf daneben KEIN A- oder CNAME-Eintrag
+  // für denselben Namen stehen. Die alten Wix-Einträge sind am 27.09.
+  // gelöscht worden, vorher wäre ein Deploy hier gescheitert.
+  // www zeigt ebenfalls hierher; die Umleitung auf die Adresse ohne www
+  // macht der Worker selbst (worker/index.js).
+  "routes": [
+    { "pattern": "renateleeb.photos", "custom_domain": true },
+    { "pattern": "www.renateleeb.photos", "custom_domain": true }
+  ]
   // Geheimnisse NICHT hier eintragen, sondern:
   //   npx wrangler secret put FORM_WEBHOOK_URL     (Zapier Catch Hook)
   //   npx wrangler secret put RESEND_API_KEY       (Alternative: Resend)
-  // Die Domain wird nach dem DNS-Umzug ergänzt:
-  //   "routes": [{ "pattern": "renateleeb.photos", "custom_domain": true },
-  //              { "pattern": "www.renateleeb.photos", "custom_domain": true }]
 }

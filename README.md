@@ -73,11 +73,23 @@ Hinweis auf die E-Mail-Adresse — es verschwindet nichts stillschweigend.
 
 ## Deployment
 
-Cloudflare baut bei jedem Push, sobald das Repo im Dashboard verbunden ist
-(Build-Befehl `npm run build`, Ausgabe `dist`). Die Domain wird erst nach dem
-DNS-Umzug als `custom_domain` in `wrangler.jsonc` eingetragen.
+Cloudflare baut bei jedem Push (Build-Befehl `npm run build`, Ausgabe `dist`).
+`renateleeb.photos` und `www.renateleeb.photos` stehen als `custom_domain` in
+`wrangler.jsonc`; Cloudflare pflegt deren DNS-Einträge selbst. Deshalb darf in
+der Zone **kein** A- oder CNAME-Eintrag für diese beiden Namen von Hand
+angelegt werden — sonst scheitert der nächste Deploy.
 
-## Umzug von Wix — was schon erledigt ist
+## Umzug von Wix — erledigt
+
+**Die Seite läuft seit 27.09.2026 unter der eigenen Domain.** Ablauf war:
+DNS zu Cloudflare (Nameserver bei GoDaddy, Zone alles „DNS only", Seite blieb
+zunächst bei Wix), vier Tage Ruhe, dann die drei Wix-A-Einträge und den
+www-CNAME gelöscht und beide Namen als Custom Domain an den Worker gehängt.
+MX und SPF wurden dabei nicht angefasst.
+
+Wix-Premium läuft noch — bewusst, damit der Rückweg offen bleibt.
+
+### Was beim Bau beachtet wurde
 
 - Texte von Start-, Über-mich- und Buchprojekte-Seite übernommen.
 - Alte Wix-Adressen leiten weiter (`worker/index.js`, eine einzige Tabelle —
@@ -89,8 +101,9 @@ DNS-Umzug als `custom_domain` in `wrangler.jsonc` eingetragen.
 
 ### Offen
 
-- DNS von Wix zu Cloudflare (Anleitung: „Domainumzug — der Ablauf").
-- DKIM und DMARC für renateleeb.photos fehlen.
+- DKIM und DMARC für renateleeb.photos fehlen (DKIM danach in der
+  Google-Admin-Konsole mit „Authentifizierung starten" scharf schalten).
+- Wix-Premium kündigen — frühestens einige Wochen nach dem 27.09.
 - Dubbles-Galerie: gehört auf renateundchris.com.
 
 ## Schriften
