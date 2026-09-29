@@ -28,6 +28,7 @@ const FONTS = `<link rel="preload" as="font" type="font/woff2" crossorigin
 const NAV = [
   { href: "/kuenstlernatur/", label: "Künstlernatur" },
   { href: site.books.url, label: site.books.label, external: true },
+  { href: site.food.url, label: site.food.label, external: true },
   { href: "/ueber-mich/", label: "Über mich" },
   { href: "/kontakt/", label: "Kontakt" },
 ];
@@ -170,6 +171,11 @@ function startseite(items) {
         <p>Drei Bildbände mit Chris H. Leeb: <em>MeerDeutig</em>, <em>Liebesrauschend</em>, <em>SeenSüchtig</em> — Fotos von mir, Texte von ihm.</p>
         <span class="more">Zu renateundchris.com →</span>
       </a>
+      <a class="card" href="${esc(site.food.url)}" target="_blank" rel="noopener">
+        <h3>Essen &amp; Trinken</h3>
+        <p>Seit Jahren fotografieren Chris und ich gegenseitig unser Essen und Trinken — über 360 Teller und Gläser, mit Karte und Geschichten zu jedem Gericht.</p>
+        <span class="more">Zu cleebration.food →</span>
+      </a>
       <a class="card" href="/ueber-mich/">
         <h3>Über mich</h3>
         <p>Lehrerin für Mathematik und Psychologie/Philosophie — und Fotografin aus Leidenschaft.</p>
@@ -295,6 +301,7 @@ function kontaktseite() {
           <a href="${esc(site.social.facebook)}" target="_blank" rel="noopener">Facebook</a>
           <a href="${esc(site.social.x)}" target="_blank" rel="noopener">X</a>
           <a href="${esc(site.books.url)}" target="_blank" rel="noopener">Buchprojekte</a>
+          <a href="${esc(site.food.url)}" target="_blank" rel="noopener">cleebration.food</a>
         </span>
       </div>
     </aside>

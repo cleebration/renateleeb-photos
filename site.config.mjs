@@ -40,6 +40,12 @@ export default {
     label: "Buchprojekte",
   },
 
+  // Gemeinsames Foto-Tagebuch fürs Essen & Trinken (eigene Seite)
+  food: {
+    url: "https://cleebration.food/de/",
+    label: "Essen & Trinken",
+  },
+
   // Standardregel der Dachmarke
   credit: {
     text: "Ein Kunstprojekt von",
