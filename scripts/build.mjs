@@ -480,6 +480,9 @@ fs.copyFileSync(path.join(ROOT, "module", "gallery-widget.js"), path.join(DIST, 
 const nAssets = copyDir(path.join(ROOT, "assets"), path.join(DIST, "assets"));
 const nFeed = copyDir(path.join(HUB_PUBLIC, "feed"), path.join(DIST, "feed"));
 const nMedia = copyDir(path.join(HUB_PUBLIC, "media"), path.join(DIST, "media"));
+// Unterrichtsmaterial: eigenständige Seiten, per QR-Code erreichbar.
+// Bewusst nicht im Menü und nicht in der Sitemap (noindex im Kopf der Seite).
+const nUnterricht = copyDir(path.join(ROOT, "unterricht"), path.join(DIST, "unterricht"));
 
 const urls = ["/", "/kuenstlernatur/", "/ueber-mich/", "/kontakt/", "/impressum/", "/datenschutz/"];
 fs.writeFileSync(path.join(DIST, "sitemap.xml"), sitemap(urls), "utf8");
@@ -490,7 +493,7 @@ fs.writeFileSync(
 );
 
 console.log(
-  `OK  ${urls.length} Seiten + 404 · ${nFeed} Feed-Datei(en) · ${nMedia} Bild(er) · ${nAssets} Asset(s)` +
+  `OK  ${urls.length} Seiten + 404 · ${nUnterricht} Unterrichtsdatei(en) · ${nFeed} Feed-Datei(en) · ${nMedia} Bild(er) · ${nAssets} Asset(s)` +
     (items.length ? ` · ${items.length} Medien im Feed` : " · ⚠ Feed leer (hub bauen!)"),
 );
 

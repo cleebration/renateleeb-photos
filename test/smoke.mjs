@@ -31,6 +31,21 @@ for (const s of seiten) check(`Seite ${s} gebaut`, fs.existsSync(path.join(DIST,
 check("sitemap.xml gebaut", fs.existsSync(path.join(DIST, "sitemap.xml")));
 check("robots.txt gebaut", fs.existsSync(path.join(DIST, "robots.txt")));
 
+// --- 1b. Unterricht: per QR erreichbar, aber nicht in Suchmaschinen -------
+{
+  const u = "unterricht/sokrates/index.html";
+  check("Unterricht: Sokrates-Seite gebaut", fs.existsSync(path.join(DIST, u)));
+  if (fs.existsSync(path.join(DIST, u))) {
+    const d = dom(u);
+    check("Unterricht: noindex gesetzt", /noindex/.test(d.querySelector('meta[name="robots"]')?.content || ""));
+    check("Unterricht: Sprache de", d.documentElement.lang === "de");
+    check("Unterricht: Impressum verlinkt", !!d.querySelector('a[href="/impressum/"]'));
+    check("Unterricht: QR-Code eingebaut", !!d.querySelector("#qrOv svg"));
+  }
+  check("Unterricht: QR-Bild liegt in dist", fs.existsSync(path.join(DIST, "unterricht/sokrates/qr-sokrates.png")));
+  check("Unterricht: nicht in der Sitemap", !read("sitemap.xml").includes("/unterricht/"));
+}
+
 // --- 2. Kopf, Navigation, Fuß ---------------------------------------------
 for (const s of seiten) {
   const d = dom(s);
