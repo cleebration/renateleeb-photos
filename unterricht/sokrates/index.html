@@ -582,13 +582,17 @@ const PROF={'Sokrates':['m',.85,.92],'Menon':['m',1.1,1.02],'Laches':['m',.8,.95
  'Der Freund':['m',1.05,1],'Pythia':['w',1.1,.82],'Ein Politiker':['m',.95,1.08],'Kriton':['m',.95,.98],
  'Der Diener':['m',.9,.9],'Erzähler':['n',1,.95],'Leon':['m',1.15,1.08],'Kevin':['m',1.1,1.1],'Mia':['w',1.15,1.05],'Herr Gruber':['m',.78,.9]};
 const FEM=/anna|petra|helena|marlene|vicki|katja|hedda|amala|sandra|helga|elke|klara|seraina|martina|katharina|ingrid|louisa|conni|lena|sabine|google deutsch|female|weiblich/i;
-const MAL=/markus|yannick|martin|hans|stefan|conrad|reed|viktor|florian|jonas|kai\b|ralf|killian|christoph|eddy|thomas|male|männlich/i;
+const MAL=/markus|yannick|martin|hans|stefan|conrad|viktor|florian|jonas|kai\b|ralf|killian|christoph|thomas|bernd|male|männlich/i;
 function gOf(v){return FEM.test(v.name)?'w':MAL.test(v.name)?'m':'?'}
 function loadVoices(){
   if(!SS)return;
   const all=SS.getVoices().filter(v=>/^de([-_]|$)/i.test(v.lang));
   // de-DE/de-AT zuerst, lokale Stimmen vor Online-Stimmen
-  deV=all.sort((a,b)=>(/de[-_](DE|AT)/i.test(b.lang)-/de[-_](DE|AT)/i.test(a.lang))||(b.localService-a.localService));
+  // Qualität zuerst: Premium/Erweitert/Natural/Neural/Google vor Standard; Spaßstimmen (Eloquence) ans Ende
+  const q=v=>(/premium/i.test(v.name)?6:0)+(/erweitert|enhanced|verbessert/i.test(v.name)?4:0)+(/natural|neural|online|siri/i.test(v.name)?5:0)+(/google/i.test(v.name)?3:0)
+    -(/eddy|flo|grandma|grandpa|oma|opa|reed|rocko|sandy|shelley|albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy/i.test(v.name)?10:0);
+  deV=all.sort((a,b)=>(q(b)-q(a))||(/de[-_](DE|AT)/i.test(b.lang)-/de[-_](DE|AT)/i.test(a.lang))||(b.localService-a.localService));
+  if(deV.some(v=>q(v)>=0))deV=deV.filter(v=>q(v)>=0); // lieber eine gute Stimme doppelt (mit anderer Tonhöhe) als eine Spaßstimme
   bVoice.hidden=false;
   if(store.get('sok-voice')==='1'&&!voiceOn)setVoice(true,false);
   if(cur)assignVoices();
