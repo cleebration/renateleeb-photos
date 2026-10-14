@@ -253,8 +253,8 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
       <div class="controls">
         <button class="btn" id="bBack">Zurück</button>
         <button class="btn primary" id="bNext">Weiter</button>
+        <button class="btn" id="bVoice" aria-pressed="false" title="Repliken mit der Sprachausgabe des Geräts vorlesen">🔊 Stimmen</button>
         <button class="btn" id="bAuto" aria-pressed="false">Automatisch</button>
-        <button class="btn" id="bVoice" aria-pressed="false" hidden title="Repliken mit der Sprachausgabe des Geräts vorlesen">🔊 Stimmen</button>
         <button class="btn" id="bAll">Alles zeigen</button>
         <button class="btn" id="bTags" aria-pressed="false">Methoden-Marker</button>
         <span class="prog" id="prog"></span>
@@ -575,6 +575,7 @@ const bTags=$('#bTags'),bAuto=$('#bAuto');
 /* ---------- Stimmen: Sprachausgabe des Geräts (Web Speech API, keine echten Stimmen der Personen) ---------- */
 const SS=('speechSynthesis' in window&&'SpeechSynthesisUtterance' in window)?window.speechSynthesis:null;
 const bVoice=$('#bVoice');
+if(!SS)bVoice.hidden=true;
 let voiceOn=false,deV=[],castV={},sayTok=0,sayEl=null;
 // Geschlecht, Tonhöhe, Tempo je Figur (gewählt, nicht historisch)
 const PROF={'Sokrates':['m',.85,.92],'Menon':['m',1.1,1.02],'Laches':['m',.8,.95],'Euthyphron':['m',1.02,1.05],
@@ -588,12 +589,13 @@ function loadVoices(){
   const all=SS.getVoices().filter(v=>/^de([-_]|$)/i.test(v.lang));
   // de-DE/de-AT zuerst, lokale Stimmen vor Online-Stimmen
   deV=all.sort((a,b)=>(/de[-_](DE|AT)/i.test(b.lang)-/de[-_](DE|AT)/i.test(a.lang))||(b.localService-a.localService));
-  bVoice.hidden=!deV.length;
-  if(deV.length&&store.get('sok-voice')==='1'&&!voiceOn)setVoice(true,false);
+  bVoice.hidden=false;
+  if(store.get('sok-voice')==='1'&&!voiceOn)setVoice(true,false);
   if(cur)assignVoices();
 }
 function assignVoices(){
-  castV={};if(!deV.length)return;
+  castV={};
+  if(!deV.length){[['S',C.S],...Object.entries(cur.cast)].forEach(([k,p])=>{const pr=PROF[p.n]||['m',1,1];castV[k]={v:null,pitch:pr[0]==='w'?Math.max(pr[1],1.25):pr[1],rate:pr[2]}});return} // keine deutsche Stimme gemeldet: Standardstimme mit lang=de-DE
   const pool={w:deV.filter(v=>gOf(v)==='w'),m:deV.filter(v=>gOf(v)==='m'),'?':deV.filter(v=>gOf(v)==='?')};
   const used=new Map();
   const keys=[['S',C.S],...Object.entries(cur.cast)];
@@ -623,7 +625,7 @@ function sayLine(l,el,done){
     if(tok!==sayTok)return;
     if(i>=parts.length){end();return}
     const u=new SpeechSynthesisUtterance(parts[i++]);
-    u.voice=cv.v;u.lang=cv.v.lang;u.pitch=cv.pitch;u.rate=cv.rate;
+    if(cv.v)u.voice=cv.v;u.lang=cv.v?cv.v.lang:'de-DE';u.pitch=cv.pitch;u.rate=cv.rate;
     u.onend=step;u.onerror=end;SS.speak(u);
   };
   step();
