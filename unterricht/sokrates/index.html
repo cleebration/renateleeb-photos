@@ -124,6 +124,10 @@ body.beamer .feed{max-height:70vh}
 .tag{font-family:var(--f-body);font-size:.75rem;font-weight:700;background:var(--marker);color:var(--marker-ink);border-radius:3px;padding:1px 7px;transform-origin:left;animation:swipe .5s ease-out both}
 .tag-note{font-family:var(--f-body);font-size:.82rem;color:var(--muted);margin-top:6px;font-style:normal}
 .hide-tags .tags,.hide-tags .tag-note{display:none}
+.say{display:none;float:right;margin:-2px -4px 0 8px;border:0;background:none;font-size:1rem;line-height:1;padding:2px 4px;border-radius:6px;cursor:pointer;opacity:.6}
+.say:hover,.say:focus-visible{opacity:1}
+.voice-on .say{display:inline-block}
+.bubble.speaking{box-shadow:0 0 0 2px var(--marker)}
 @keyframes swipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .enter{animation:enter .45s cubic-bezier(.2,.8,.2,1) both}
 @keyframes enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -234,7 +238,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
 <section class="tab" id="buehne" role="tabpanel" aria-labelledby="t-buehne">
   <div class="stack read" style="margin-bottom:18px">
     <h2>Dialog-Bühne</h2>
-    <p>Mit <b>Weiter</b> (oder Leertaste/Pfeil rechts) erscheint Replik für Replik. Die <b>Methoden-Marker</b> zeigen in Textmarker-Gelb, wo Sokrates welche Technik einsetzt. Tipp: Lies einen Dialog zuerst ohne Marker und such die Techniken selbst.</p>
+    <p>Mit <b>Weiter</b> (oder Leertaste/Pfeil rechts) erscheint Replik für Replik. Die <b>Methoden-Marker</b> zeigen in Textmarker-Gelb, wo Sokrates welche Technik einsetzt. Tipp: Lies einen Dialog zuerst ohne Marker und such die Techniken selbst. Mit <b>🔊 Stimmen</b> werden die Repliken vorgelesen; 🔊 in einer Sprechblase spielt sie nochmal ab.</p>
   </div>
   <div class="stage-wrap">
     <div class="picker" id="picker" aria-label="Dialog auswählen"></div>
@@ -250,6 +254,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-si
         <button class="btn" id="bBack">Zurück</button>
         <button class="btn primary" id="bNext">Weiter</button>
         <button class="btn" id="bAuto" aria-pressed="false">Automatisch</button>
+        <button class="btn" id="bVoice" aria-pressed="false" hidden title="Repliken mit der Sprachausgabe des Geräts vorlesen">🔊 Stimmen</button>
         <button class="btn" id="bAll">Alles zeigen</button>
         <button class="btn" id="bTags" aria-pressed="false">Methoden-Marker</button>
         <span class="prog" id="prog"></span>
@@ -349,6 +354,7 @@ function showTab(id,anchor){
   tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===id?'true':'false'));
   document.querySelectorAll('section.tab').forEach(s=>s.hidden=s.id!==id);
   store.set('sok-tab',id);
+  if(id!=='buehne'&&window.speechSynthesis)speechSynthesis.cancel();
   if(anchor){const el=document.getElementById(anchor);if(el)setTimeout(()=>el.scrollIntoView({behavior:reduce?'auto':'smooth'}),30)}
   else window.scrollTo({top:0});
 }
@@ -565,6 +571,74 @@ const picker=$('#picker'),feed=$('#feed');
 let cur=null,shown=0,autoT=null,busy=false;
 let tagsOn=store.get('sok-tags')==='1';
 const bTags=$('#bTags'),bAuto=$('#bAuto');
+
+/* ---------- Stimmen: Sprachausgabe des Geräts (Web Speech API, keine echten Stimmen der Personen) ---------- */
+const SS=('speechSynthesis' in window&&'SpeechSynthesisUtterance' in window)?window.speechSynthesis:null;
+const bVoice=$('#bVoice');
+let voiceOn=false,deV=[],castV={},sayTok=0,sayEl=null;
+// Geschlecht, Tonhöhe, Tempo je Figur (gewählt, nicht historisch)
+const PROF={'Sokrates':['m',.85,.92],'Menon':['m',1.1,1.02],'Laches':['m',.8,.95],'Euthyphron':['m',1.02,1.05],
+ 'Der Freund':['m',1.05,1],'Pythia':['w',1.1,.82],'Ein Politiker':['m',.95,1.08],'Kriton':['m',.95,.98],
+ 'Der Diener':['m',.9,.9],'Erzähler':['n',1,.95],'Leon':['m',1.15,1.08],'Kevin':['m',1.1,1.1],'Mia':['w',1.15,1.05],'Herr Gruber':['m',.78,.9]};
+const FEM=/anna|petra|helena|marlene|vicki|katja|hedda|amala|sandra|helga|elke|klara|seraina|martina|katharina|ingrid|louisa|conni|lena|sabine|google deutsch|female|weiblich/i;
+const MAL=/markus|yannick|martin|hans|stefan|conrad|reed|viktor|florian|jonas|kai\b|ralf|killian|christoph|eddy|thomas|male|männlich/i;
+function gOf(v){return FEM.test(v.name)?'w':MAL.test(v.name)?'m':'?'}
+function loadVoices(){
+  if(!SS)return;
+  const all=SS.getVoices().filter(v=>/^de([-_]|$)/i.test(v.lang));
+  // de-DE/de-AT zuerst, lokale Stimmen vor Online-Stimmen
+  deV=all.sort((a,b)=>(/de[-_](DE|AT)/i.test(b.lang)-/de[-_](DE|AT)/i.test(a.lang))||(b.localService-a.localService));
+  bVoice.hidden=!deV.length;
+  if(deV.length&&store.get('sok-voice')==='1'&&!voiceOn)setVoice(true,false);
+  if(cur)assignVoices();
+}
+function assignVoices(){
+  castV={};if(!deV.length)return;
+  const pool={w:deV.filter(v=>gOf(v)==='w'),m:deV.filter(v=>gOf(v)==='m'),'?':deV.filter(v=>gOf(v)==='?')};
+  const used=new Map();
+  const keys=[['S',C.S],...Object.entries(cur.cast)];
+  keys.forEach(([k,p])=>{
+    const pr=PROF[p.n]||['m',1,1];
+    let cand=pr[0]==='w'?[...pool.w,...pool['?']]:pr[0]==='m'?[...pool.m,...pool['?']]:[...deV];
+    if(!cand.length)cand=deV;
+    const free=cand.filter(v=>!used.has(v.name));
+    const v=(free[0]||cand[0]);
+    let pitch=pr[1];
+    if(used.has(v.name)){pitch=Math.min(2,pitch+.22*used.get(v.name))} // gleiche Gerätestimme: Tonhöhe absetzen
+    used.set(v.name,(used.get(v.name)||0)+1);
+    castV[k]={v,pitch,rate:pr[2]};
+  });
+}
+function hush(){sayTok++;if(SS)SS.cancel();if(sayEl){sayEl.classList.remove('speaking');sayEl=null}}
+function chunks(t){const out=[];(t.match(/[^.!?…]+[.!?…]*[»“”"']?\s*/g)||[t]).forEach(x=>{const last=out[out.length-1];if(last&&(last+x).length<180)out[out.length-1]=last+x;else out.push(x)});return out.filter(x=>x.trim())}
+function sayLine(l,el,done){
+  hush();
+  if(!voiceOn||!SS||!castV[l[0]]){if(done)done();return}
+  const tok=sayTok,cv=castV[l[0]],parts=chunks(l[1]);
+  let i=0,fin=false;
+  if(el){sayEl=el;el.classList.add('speaking')}
+  const end=()=>{if(fin)return;fin=true;clearTimeout(guard);if(tok!==sayTok)return;if(sayEl){sayEl.classList.remove('speaking');sayEl=null}if(done)done()};
+  const guard=setTimeout(end,4000+l[1].length*110/cv.rate); // falls ein Browser onend nicht meldet
+  const step=()=>{
+    if(tok!==sayTok)return;
+    if(i>=parts.length){end();return}
+    const u=new SpeechSynthesisUtterance(parts[i++]);
+    u.voice=cv.v;u.lang=cv.v.lang;u.pitch=cv.pitch;u.rate=cv.rate;
+    u.onend=step;u.onerror=end;SS.speak(u);
+  };
+  step();
+}
+function lastBubble(){const ls=feed.querySelectorAll('.line');return ls.length?ls[ls.length-1].querySelector('.bubble'):null}
+function setVoice(on,speakNow){
+  voiceOn=on;bVoice.setAttribute('aria-pressed',on);feed.classList.toggle('voice-on',on);store.set('sok-voice',on?'1':'0');
+  if(!on){hush();return}
+  if(cur)assignVoices();
+  if(speakNow&&cur&&shown)sayLine(cur.L[shown-1],lastBubble());
+}
+bVoice.onclick=()=>{stopAuto();setVoice(!voiceOn,true)};
+if(SS){loadVoices();if('onvoiceschanged' in SS)SS.addEventListener('voiceschanged',loadVoices);setTimeout(loadVoices,800)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAuto();hush()}});
+window.addEventListener('pagehide',()=>{if(SS)SS.cancel()});
 function setTags(on){tagsOn=on;bTags.setAttribute('aria-pressed',on);feed.classList.toggle('hide-tags',!on);store.set('sok-tags',on?'1':'0')}
 setTags(tagsOn);
 bTags.onclick=()=>setTags(!tagsOn);
@@ -589,6 +663,7 @@ function bubble(l,animate){
   const t=document.createElement('span');
   if(animate&&!reduce){text.split(/(\s+)/).forEach((w,i)=>{const s=document.createElement('span');s.className='w';s.style.animationDelay=(i*12)+'ms';s.textContent=w;t.appendChild(s)})}
   else t.textContent=text;
+  if(SS){const sb=document.createElement('button');sb.className='say';sb.type='button';sb.textContent='🔊';sb.setAttribute('aria-label','Nochmal hören');sb.onclick=()=>{stopAuto();sayLine(l,bub)};bub.appendChild(sb)}
   bub.appendChild(t);
   if(tags&&tags.length){const tg=document.createElement('div');tg.className='tags';tags.forEach((x,i)=>{const s=document.createElement('span');s.className='tag';s.style.animationDelay=(animate&&!reduce?400+i*120:0)+'ms';s.textContent=x;tg.appendChild(s)});bub.appendChild(tg)}
   if(note){const n=document.createElement('div');n.className='tag-note';n.textContent=note;bub.appendChild(n)}
@@ -604,34 +679,38 @@ function render(animLast){
   feed.scrollTop=feed.scrollHeight;
 }
 function load(id){
-  stopAuto();cur=D.find(d=>d.id===id)||D[0];shown=1;
+  stopAuto();hush();cur=D.find(d=>d.id===id)||D[0];shown=1;assignVoices();
   [...picker.querySelectorAll('button')].forEach(b=>b.setAttribute('aria-current',b.dataset.id===cur.id?'true':'false'));
   $('#stTitle').textContent=cur.title;$('#stSrc').textContent=cur.src;$('#stIntro').textContent=cur.intro;
   const cast=$('#stCast');cast.innerHTML='';
   [['S',C.S],...Object.entries(cur.cast)].forEach(([k,p])=>{if(k==='N')return;const s=document.createElement('span');s.appendChild(avatar(p));s.appendChild(document.createTextNode(p.n));cast.appendChild(s)});
   store.set('sok-dlg',cur.id);render(false);
 }
-function next(){
-  if(busy||!cur||shown>=cur.L.length)return;
-  if(reduce){shown++;render(false);return}
+function next(done){
+  if(busy||!cur||shown>=cur.L.length){if(done)done();return}
+  hush();
+  if(reduce){shown++;render(false);sayLine(cur.L[shown-1],lastBubble(),done);return}
   busy=true;
   const l=cur.L[shown];const row=document.createElement('div');row.className='line'+(l[0]==='S'?'':l[0]==='N'?' narr':' right');
   if(l[0]!=='N')row.appendChild(avatar(who(l[0])));
   const t=document.createElement('div');t.className='bubble typing';t.innerHTML='<i></i><i></i><i></i>';row.appendChild(t);
   feed.appendChild(row);feed.scrollTop=feed.scrollHeight;
-  setTimeout(()=>{shown++;render(true);busy=false},520);
+  setTimeout(()=>{shown++;render(true);busy=false;sayLine(cur.L[shown-1],lastBubble(),done)},520);
 }
-function back(){if(shown>1){stopAuto();shown--;render(false)}}
-function stopAuto(){clearTimeout(autoT);autoT=null;bAuto.setAttribute('aria-pressed','false')}
+function back(){if(shown>1){stopAuto();hush();shown--;render(false)}}
+let autoOn=false;
+function stopAuto(){autoOn=false;clearTimeout(autoT);autoT=null;bAuto.setAttribute('aria-pressed','false')}
 function autoStep(){
+  if(!autoOn)return;
   if(!cur||shown>=cur.L.length){stopAuto();return}
+  if(voiceOn){next(()=>{if(autoOn)autoT=setTimeout(autoStep,450)});return} // mit Stimmen: erst weiter, wenn ausgeredet
   next();const len=cur.L[Math.min(shown,cur.L.length-1)][1].length;
   autoT=setTimeout(autoStep,1800+len*38);
 }
 $('#bNext').onclick=()=>{stopAuto();next()};
 $('#bBack').onclick=back;
-$('#bAll').onclick=()=>{stopAuto();shown=cur.L.length;render(false)};
-bAuto.onclick=()=>{if(autoT){stopAuto()}else{bAuto.setAttribute('aria-pressed','true');if(shown>=cur.L.length){shown=1;render(false)}autoT=setTimeout(autoStep,300)}};
+$('#bAll').onclick=()=>{stopAuto();hush();shown=cur.L.length;render(false)};
+bAuto.onclick=()=>{if(autoOn){stopAuto();hush()}else{autoOn=true;bAuto.setAttribute('aria-pressed','true');if(shown>=cur.L.length){shown=1;render(false)}if(voiceOn&&shown===1)sayLine(cur.L[0],lastBubble(),()=>{if(autoOn)autoT=setTimeout(autoStep,450)});else autoT=setTimeout(autoStep,300)}};
 document.addEventListener('keydown',e=>{
   if($('#buehne').hidden)return;
   if(e.target.closest&&e.target.closest('input,textarea'))return;
