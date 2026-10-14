@@ -1,10 +1,10 @@
 {
   "Sokrates": {
-    "stimme": "de-DE-Chirp3-HD-Achird",
+    "stimme": "de-DE-Chirp3-HD-Algenib",
     "tempo": 0.92
   },
   "Menon": {
-    "stimme": "de-DE-Chirp3-HD-Alnilam",
+    "stimme": "de-DE-Chirp3-HD-Charon",
     "tempo": 1.02
   },
   "Laches": {
@@ -12,7 +12,7 @@
     "tempo": 0.95
   },
   "Euthyphron": {
-    "stimme": "de-DE-Chirp3-HD-Puck",
+    "stimme": "de-DE-Chirp3-HD-Sadachbia",
     "tempo": 1.05
   },
   "Der Freund": {
@@ -20,15 +20,15 @@
     "tempo": 1
   },
   "Pythia": {
-    "stimme": "de-DE-Chirp3-HD-Achernar",
+    "stimme": "de-DE-Chirp3-HD-Autonoe",
     "tempo": 0.82
   },
   "Erzähler": {
-    "stimme": "de-DE-Chirp3-HD-Zubenelgenubi",
+    "stimme": "de-DE-Chirp3-HD-Aoede",
     "tempo": 0.95
   },
   "Ein Politiker": {
-    "stimme": "de-DE-Chirp3-HD-Algieba",
+    "stimme": "de-DE-Chirp3-HD-Charon",
     "tempo": 1.08
   },
   "Kriton": {
@@ -44,15 +44,15 @@
     "tempo": 1.08
   },
   "Kevin": {
-    "stimme": "de-DE-Chirp3-HD-Umbriel",
+    "stimme": "de-DE-Chirp3-HD-Achird",
     "tempo": 1.1
   },
   "Mia": {
-    "stimme": "de-DE-Chirp3-HD-Callirrhoe",
+    "stimme": "de-DE-Chirp3-HD-Erinome",
     "tempo": 1.05
   },
   "Herr Gruber": {
-    "stimme": "de-DE-Chirp3-HD-Algenib",
+    "stimme": "de-DE-Chirp3-HD-Algieba",
     "tempo": 0.9
   }
 }
