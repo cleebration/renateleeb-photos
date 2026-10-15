@@ -43,7 +43,7 @@ function masthead(current) {
     return `<a href="${esc(n.href)}"${attrs}>${esc(n.label)}</a>`;
   }).join("\n        ");
   return `<header class="mast"><div class="wrap mast-row">
-      <a class="brand" href="/">Renate <span>Leeb</span></a>
+      <a class="brand" href="/"><img src="/assets/brand/renate-leeb-logo-quer-hell.svg" width="280" height="64" alt="Renate Leeb — Fotografie"></a>
       <input type="checkbox" id="navtoggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
       <label for="navtoggle" class="nav-burger" aria-hidden="true"><span></span><span></span><span></span></label>
       <nav class="mast-nav">
@@ -84,7 +84,15 @@ function page({ url, title, description, body, head = "", bodyEnd = "" }) {
 <meta property="og:description" content="${esc(description || site.description)}">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:locale" content="de_AT">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="${site.siteUrl}/og-image-1200x630_hell.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon-180.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#2A2522">
 ${FONTS}
 <link rel="stylesheet" href="/styles.css">
 ${head}
@@ -478,6 +486,8 @@ fs.copyFileSync(path.join(ROOT, "src", "fonts.css"), path.join(DIST, "fonts.css"
 fs.copyFileSync(path.join(ROOT, "src", "kontakt.js"), path.join(DIST, "kontakt.js"));
 fs.copyFileSync(path.join(ROOT, "module", "gallery-widget.js"), path.join(DIST, "gallery-widget.js"));
 const nAssets = copyDir(path.join(ROOT, "assets"), path.join(DIST, "assets"));
+// Markenzeichen im Web-Root: Favicons, App-Icons, Manifest, Link-Vorschau (Branding-Kit Renate Leeb)
+const nPublic = copyDir(path.join(ROOT, "public"), DIST);
 const nFeed = copyDir(path.join(HUB_PUBLIC, "feed"), path.join(DIST, "feed"));
 const nMedia = copyDir(path.join(HUB_PUBLIC, "media"), path.join(DIST, "media"));
 // Unterrichtsmaterial: eigenständige Seiten, per QR-Code erreichbar.

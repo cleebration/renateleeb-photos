@@ -60,11 +60,9 @@ a { color: var(--accent-ink); }
   display: flex; align-items: center; justify-content: space-between;
   gap: 20px; flex-wrap: wrap; padding-block: 15px;
 }
-.brand {
-  font-family: var(--serif); font-size: 1.3rem; font-weight: 500;
-  text-decoration: none; color: var(--ink); letter-spacing: .01em;
-}
-.brand span { color: var(--accent); }
+.brand { display: block; line-height: 0; text-decoration: none; }
+.brand img { display: block; height: 46px; width: auto; }
+@media (max-width: 620px) { .brand img { height: 38px; } }
 .mast-nav { display: flex; gap: 26px; font-size: 14.5px; }
 .mast-nav a { color: var(--muted); text-decoration: none; padding-block: 4px; }
 .mast-nav a:hover { color: var(--ink); }

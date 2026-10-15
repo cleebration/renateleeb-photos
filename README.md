@@ -106,6 +106,18 @@ Wix-Premium läuft noch — bewusst, damit der Rückweg offen bleibt.
 - Wix-Premium kündigen — frühestens einige Wochen nach dem 27.09.
 - Dubbles-Galerie: gehört auf renateundchris.com.
 
+## Logo und Markenzeichen
+
+Logo „Farbfelder mit Auge“ + Signet „Windrad“ (Entscheidung 15.10.2026). Quelle aller
+Dateien ist das Branding-Kit in `1! claude/04 Templates/Branding/Renate Leeb/`.
+
+- `assets/brand/` – Logo im Kopf (`renate-leeb-logo-quer-hell.svg`, Schrift in Pfaden) und Signet
+- `public/` – wird beim Build **ins Web-Root** kopiert: favicon.ico/.svg/-PNGs,
+  apple-touch-icon, maskable Icon, `site.webmanifest`, Link-Vorschau `og-image-1200x630_hell.png`
+- `assets/signatur-logo-560.png` – Logo für die E-Mail-Signatur
+
+Neue Fassung des Logos: Dateien aus dem Kit (`logo/`, `web/`) hierher kopieren, bauen, testen.
+
 ## Schriften
 
 Cormorant Garamond (Überschriften) + Karla (Text), **von der eigenen Domain

@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Renate Leeb Fotografie">
-  <rect width="64" height="64" rx="10" fill="#ecefe7"/>
-  <path d="M32 50c0-12 6-22 16-26-2 14-7 22-16 26z" fill="#46592c"/>
-  <path d="M32 50c0-10-5-18-14-21 2 11 6 18 14 21z" fill="#34461f"/>
-  <path d="M32 52V34" stroke="#34461f" stroke-width="2.5" stroke-linecap="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.00 64.00" width="64" height="64" role="img" aria-label="Renate Leeb"><title>Renate Leeb</title><g transform="scale(0.64)"><rect x="30" width="70" height="30" fill="#0A8FF0"/><rect x="70" y="30" width="30" height="70" fill="#FFC400"/><rect y="70" width="70" height="30" fill="#FF5A1F"/><rect width="30" height="70" fill="#12B75A"/><rect x="30" y="30" width="40" height="40" fill="#E0157F"/><path d="M30 50Q50 32 70 50Q50 68 30 50Z" fill="#FFFCF5"/><path d="M50 50L50.000 42.000A8 8 0 0 1 57.608 47.528Z" fill="#0A8FF0"/><path d="M50 50L57.608 47.528A8 8 0 0 1 54.702 56.472Z" fill="#12B75A"/><path d="M50 50L54.702 56.472A8 8 0 0 1 45.298 56.472Z" fill="#FFC400"/><path d="M50 50L45.298 56.472A8 8 0 0 1 42.392 47.528Z" fill="#FF5A1F"/><path d="M50 50L42.392 47.528A8 8 0 0 1 50.000 42.000Z" fill="#FF2E4D"/></g></svg>
