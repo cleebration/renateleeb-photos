@@ -27,9 +27,7 @@ const FONTS = `<link rel="preload" as="font" type="font/woff2" crossorigin
 
 const NAV = [
   { href: "/kuenstlernatur/", label: "Künstlernatur" },
-  { href: site.books.url, label: site.books.label, external: true },
-  { href: site.food.url, label: site.food.label, external: true },
-  { href: site.dubbles.url, label: site.dubbles.label, external: true },
+  { href: "/was-ich-mache/", label: "Was ich mache" },
   { href: "/ueber-mich/", label: "Über mich" },
   { href: "/kontakt/", label: "Kontakt" },
 ];
@@ -175,15 +173,10 @@ function startseite(items) {
         <p>${items.length || 53} Arbeiten: Makroaufnahmen und Collagen von Blüten, Blättern und Wasser.</p>
         <span class="more">Zur Galerie →</span>
       </a>
-      <a class="card" href="${esc(site.books.url)}" target="_blank" rel="noopener">
-        <h3>Buchprojekte</h3>
-        <p>Drei Bildbände mit Chris H. Leeb: <em>MeerDeutig</em>, <em>Liebesrauschend</em>, <em>SeenSüchtig</em> — Fotos von mir, Texte von ihm.</p>
-        <span class="more">Zu renateundchris.com →</span>
-      </a>
-      <a class="card" href="${esc(site.food.url)}" target="_blank" rel="noopener">
-        <h3>Essen &amp; Trinken</h3>
-        <p>Seit Jahren fotografieren Chris und ich gegenseitig unser Essen und Trinken — über 360 Teller und Gläser, mit Karte und Geschichten zu jedem Gericht.</p>
-        <span class="more">Zu cleebration.food →</span>
+      <a class="card" href="/was-ich-mache/">
+        <h3>Was ich mache</h3>
+        <p>Gemeinsam mit Chris: Bücher, Reisen, Dubbles, Essen &amp; Trinken — und wir singen beide im Chor Cantalentia.</p>
+        <span class="more">Alle Projekte →</span>
       </a>
       <a class="card" href="/ueber-mich/">
         <h3>Über mich</h3>
@@ -216,6 +209,29 @@ function galerieseite() {
 
   <section>
     <gallery-grid feed="${esc(site.galleryFeed)}" gallery="kuenstlernatur" filter="on"></gallery-grid>
+  </section>
+</div>`,
+  });
+}
+
+// „Was ich mache“: gemeinsame Projekte mit Chris als Kacheln aus dem zentralen Galerie-Baukasten
+// (cleebration-gallery-hub, Galerie „gemeinsam“). Neues Projekt = Eintrag im Hub, hier kein Neubau nötig.
+function wasichmache() {
+  return page({
+    url: "/was-ich-mache/",
+    title: C.wasIchMache.title,
+    description: C.wasIchMache.description,
+    head: `<script type="module" src="/gallery-widget-hub.js"></script>`,
+    body: `
+<div class="wrap">
+  <section class="hero">
+    <p class="eyebrow">${esc(site.author.name)} — gemeinsam mit Chris</p>
+    <h1>${esc(C.wasIchMache.title)}</h1>
+    <p class="lede">${C.wasIchMache.lede}</p>
+  </section>
+
+  <section class="gemeinsam">
+    <gallery-grid feed="${esc(site.sharedFeed)}" gallery="gemeinsam" teaser="on" link-mode="direct"></gallery-grid>
   </section>
 </div>`,
   });
@@ -414,7 +430,7 @@ function datenschutz() {
       per E-Mail schickst.</p>
 
     <h3>7. Externe Links &amp; Social Media</h3>
-    <p>Diese Website verlinkt auf externe Seiten (Facebook, X, renateundchris.com, cleebration.com).
+    <p>Diese Website verlinkt auf externe Seiten (Facebook, X, renateundchris.com, cleebration.com, cleebration.food, cantalentia.at).
       Beim Anklicken gelangst du auf Seiten Dritter, für deren Datenverarbeitung der jeweilige
       Anbieter verantwortlich ist. Die Verweise sind reine Verlinkungen und laden keine
       Tracking-Skripte.</p>
@@ -475,6 +491,7 @@ const items = galleryItems();
 
 write("/", startseite(items));
 write("/kuenstlernatur/", galerieseite());
+write("/was-ich-mache/", wasichmache());
 write("/ueber-mich/", uebermich());
 write("/kontakt/", kontaktseite());
 write("/impressum/", impressum());
@@ -486,6 +503,8 @@ fs.copyFileSync(path.join(ROOT, "src", "styles.css"), path.join(DIST, "styles.cs
 fs.copyFileSync(path.join(ROOT, "src", "fonts.css"), path.join(DIST, "fonts.css"));
 fs.copyFileSync(path.join(ROOT, "src", "kontakt.js"), path.join(DIST, "kontakt.js"));
 fs.copyFileSync(path.join(ROOT, "module", "gallery-widget.js"), path.join(DIST, "gallery-widget.js"));
+// neuere Fassung des Moduls (Karten mit Kurztext, Direktlink) – nur für „Was ich mache“
+fs.copyFileSync(path.join(ROOT, "module", "gallery-widget-hub.js"), path.join(DIST, "gallery-widget-hub.js"));
 const nAssets = copyDir(path.join(ROOT, "assets"), path.join(DIST, "assets"));
 // Markenzeichen im Web-Root: Favicons, App-Icons, Manifest, Link-Vorschau (Branding-Kit Renate Leeb)
 const nPublic = copyDir(path.join(ROOT, "public"), DIST);
@@ -495,7 +514,7 @@ const nMedia = copyDir(path.join(HUB_PUBLIC, "media"), path.join(DIST, "media"))
 // Bewusst nicht im Menü und nicht in der Sitemap (noindex im Kopf der Seite).
 const nUnterricht = copyDir(path.join(ROOT, "unterricht"), path.join(DIST, "unterricht"));
 
-const urls = ["/", "/kuenstlernatur/", "/ueber-mich/", "/kontakt/", "/impressum/", "/datenschutz/"];
+const urls = ["/", "/kuenstlernatur/", "/was-ich-mache/", "/ueber-mich/", "/kontakt/", "/impressum/", "/datenschutz/"];
 fs.writeFileSync(path.join(DIST, "sitemap.xml"), sitemap(urls), "utf8");
 fs.writeFileSync(
   path.join(DIST, "robots.txt"),

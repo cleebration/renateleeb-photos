@@ -46,11 +46,9 @@ export default {
     label: "Essen & Trinken",
   },
 
-  // Gemeinsame Doppelbilder von Renate & Chris (kanonisch auf renateundchris.com)
-  dubbles: {
-    url: "https://renateundchris.com/dubbles",
-    label: "Dubbles",
-  },
+  // „Was ich mache“: gemeinsame Projekte mit Chris, Kacheln aus dem zentralen Galerie-Baukasten
+  // Der Worker reicht Feed und Bilder unter /hub/ durch (worker/index.js) — kein Aufruf fremder Server im Browser.
+  sharedFeed: "/hub/feed.json",
 
   // Standardregel der Dachmarke
   credit: {

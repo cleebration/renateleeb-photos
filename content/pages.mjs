@@ -76,6 +76,13 @@ Schönheiten der Natur noch eher fremd ist:</p>
     die uns erfreuen und ein Lächeln auf unsere Lippen zaubern können …`,
 };
 
+export const wasIchMache = {
+  title: "Was ich mache",
+  description: "Gemeinsame Projekte von Renate Leeb und Chris H. Leeb: Bücher, Reisen, Dubbles, Essen & Trinken, Chor Cantalentia.",
+  lede: `Neben meiner Fotografie mache ich vieles gemeinsam mit Chris — Bücher,
+    Reisen, Fotoexperimente, und wir singen beide im Chor.`,
+};
+
 export const kontakt = {
   title: "Kontakt",
   lede: `Fragen zu einem Bild, eine Ausstellung, ein gemeinsames Projekt —

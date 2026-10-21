@@ -251,3 +251,11 @@ footer.site nav { display: flex; gap: 16px; flex-wrap: wrap; }
   * { transition: none !important; animation: none !important; }
   html { scroll-behavior: auto; }
 }
+
+/* „Was ich mache“ – Kacheln aus dem Galerie-Baukasten (<gallery-grid>, Shadow DOM, Farben per --gal-*) */
+.gemeinsam gallery-grid {
+  --gal-font-display: "Cormorant Garamond", Georgia, serif;
+  --gal-font-body: "Karla", system-ui, sans-serif;
+  --gal-text: var(--ink); --gal-muted: var(--muted); --gal-accent: var(--accent-ink);
+  --gal-border: var(--line); --gal-aspect: 3 / 2; --gal-tile: 260px; --gal-gap: 18px;
+}

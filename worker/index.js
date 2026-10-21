@@ -120,6 +120,27 @@ async function handleKontakt(request, env) {
     : textPage("Danke", "Die Nachricht ist unterwegs. Ich melde mich.");
 }
 
+// --- „Was ich mache“: Kacheln aus dem zentralen Galerie-Baukasten ----------
+// Der Worker holt Feed und Bilder serverseitig vom Hub (Vercel) und liefert sie
+// unter der eigenen Domain aus. So lädt der Browser der Besucher nichts von
+// fremden Servern (Datenschutz: keine IP-Übertragung an Vercel).
+const HUB = "https://cleebration-gallery-hub.vercel.app";
+async function hubProxy(url) {
+  if (url.pathname === "/hub/feed.json") {
+    const r = await fetch(HUB + "/feed/sites/renateleeb.json", { cf: { cacheTtl: 300, cacheEverything: true } });
+    if (!r.ok) return json([], 200);
+    const text = (await r.text()).split(HUB + "/media/").join("/hub/media/");
+    return new Response(text, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300" } });
+  }
+  const m = url.pathname.match(/^\/hub\/media\/([A-Za-z0-9._\/-]+\.(?:jpe?g|png|webp))$/i);
+  if (m && !m[1].includes("..")) {
+    const r = await fetch(HUB + "/media/" + m[1], { cf: { cacheTtl: 86400, cacheEverything: true } });
+    if (!r.ok) return new Response("Nicht gefunden", { status: 404 });
+    return new Response(r.body, { headers: { "content-type": r.headers.get("content-type") || "image/jpeg", "cache-control": "public, max-age=86400" } });
+  }
+  return null;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -131,6 +152,11 @@ export default {
     }
 
     // 2. Kontaktformular
+    if (url.pathname.startsWith("/hub/")) {
+      const antwort = await hubProxy(url);
+      if (antwort) return antwort;
+    }
+
     if (url.pathname === "/api/kontakt") {
       if (request.method !== "POST") return json({ error: "Nur POST." }, 405);
       return handleKontakt(request, env);

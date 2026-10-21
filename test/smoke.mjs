@@ -56,14 +56,22 @@ for (const s of seiten) {
   check(`${s}: cleebration-Credit`, read(s).includes("cleebration.com"));
 }
 
-// --- 3. Buchprojekte zeigen nach außen, nicht auf eine eigene Seite --------
+// --- 3. Gemeinsame Projekte: ein Menüpunkt „Was ich mache“ mit Kacheln aus dem Hub ----
 for (const s of ["index.html", "kuenstlernatur/index.html", "kontakt/index.html"]) {
   const d = dom(s);
-  const buch = [...d.querySelectorAll(".mast-nav a")].find((a) => /Buchprojekte/i.test(a.textContent));
-  check(`${s}: Menüpunkt Buchprojekte vorhanden`, !!buch);
-  check(`${s}: Buchprojekte zeigt auf renateundchris.com`,
-    !!buch && buch.getAttribute("href").startsWith(site.books.url));
-  check(`${s}: Buchprojekte öffnet extern`, !!buch && buch.getAttribute("rel") === "noopener");
+  const wim = [...d.querySelectorAll(".mast-nav a")].find((a) => /Was ich mache/i.test(a.textContent));
+  check(`${s}: Menüpunkt Was ich mache vorhanden`, !!wim);
+  check(`${s}: Was ich mache zeigt auf /was-ich-mache/`, !!wim && wim.getAttribute("href") === "/was-ich-mache/");
+}
+{
+  const s = "was-ich-mache/index.html";
+  check(`${s}: gebaut`, fs.existsSync(path.join(DIST, s)));
+  if (fs.existsSync(path.join(DIST, s))) {
+    const g = dom(s).querySelector("gallery-grid");
+    check(`${s}: Kacheln aus dem Hub (Galerie gemeinsam)`, !!g && g.getAttribute("gallery") === "gemeinsam"
+      && g.getAttribute("feed") === site.sharedFeed);
+  }
+  check("Modul gallery-widget-hub.js liegt in dist", fs.existsSync(path.join(DIST, "gallery-widget-hub.js")));
 }
 
 // --- 4. Galerie ------------------------------------------------------------
