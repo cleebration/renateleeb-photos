@@ -125,17 +125,23 @@ async function handleKontakt(request, env) {
 // unter der eigenen Domain aus. So lädt der Browser der Besucher nichts von
 // fremden Servern (Datenschutz: keine IP-Übertragung an Vercel).
 const HUB = "https://cleebration-gallery-hub.vercel.app";
+// Kein Zwischenspeichern von Fehlern: nur erfolgreiche Antworten werden (vom Browser) gecacht.
+const HUB_HEADERS = { "user-agent": "renateleeb.photos-worker", accept: "*/*" };
 async function hubProxy(url) {
   if (url.pathname === "/hub/feed.json") {
-    const r = await fetch(HUB + "/feed/sites/renateleeb.json", { cf: { cacheTtl: 300, cacheEverything: true } });
-    if (!r.ok) return json([], 200);
+    let r;
+    try { r = await fetch(HUB + "/feed/sites/renateleeb.json", { headers: HUB_HEADERS }); }
+    catch (e) { return json({ error: "Hub nicht erreichbar", detail: String(e) }, 502); }
+    if (!r.ok) return json({ error: "Hub antwortet mit " + r.status }, 502);
     const text = (await r.text()).split(HUB + "/media/").join("/hub/media/");
     return new Response(text, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300" } });
   }
   const m = url.pathname.match(/^\/hub\/media\/([A-Za-z0-9._\/-]+\.(?:jpe?g|png|webp))$/i);
   if (m && !m[1].includes("..")) {
-    const r = await fetch(HUB + "/media/" + m[1], { cf: { cacheTtl: 86400, cacheEverything: true } });
-    if (!r.ok) return new Response("Nicht gefunden", { status: 404 });
+    let r;
+    try { r = await fetch(HUB + "/media/" + m[1], { headers: HUB_HEADERS }); }
+    catch (e) { return new Response("Hub nicht erreichbar", { status: 502 }); }
+    if (!r.ok) return new Response("Hub antwortet mit " + r.status, { status: r.status === 404 ? 404 : 502 });
     return new Response(r.body, { headers: { "content-type": r.headers.get("content-type") || "image/jpeg", "cache-control": "public, max-age=86400" } });
   }
   return null;
