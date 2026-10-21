@@ -29,6 +29,7 @@ const NAV = [
   { href: "/kuenstlernatur/", label: "Künstlernatur" },
   { href: site.books.url, label: site.books.label, external: true },
   { href: site.food.url, label: site.food.label, external: true },
+  { href: site.dubbles.url, label: site.dubbles.label, external: true },
   { href: "/ueber-mich/", label: "Über mich" },
   { href: "/kontakt/", label: "Kontakt" },
 ];

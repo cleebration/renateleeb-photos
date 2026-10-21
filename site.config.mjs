@@ -46,6 +46,12 @@ export default {
     label: "Essen & Trinken",
   },
 
+  // Gemeinsame Doppelbilder von Renate & Chris (kanonisch auf renateundchris.com)
+  dubbles: {
+    url: "https://renateundchris.com/dubbles",
+    label: "Dubbles",
+  },
+
   // Standardregel der Dachmarke
   credit: {
     text: "Ein Kunstprojekt von",
