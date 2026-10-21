@@ -108,7 +108,7 @@ Wix-Premium läuft noch — bewusst, damit der Rückweg offen bleibt.
 
 ## Logo und Markenzeichen
 
-Logo „Farbfelder mit Auge“ + Signet „Windrad“ (Entscheidung 15.10.2026). Quelle aller
+Logo „Farbfelder mit Auge“ + Signet „Windrad“ (Entscheidung 15.10.2026; Schriftzug seit 21.10.2026 in Perpetua + Gill Sans MT, „FOTOGRAFIE“ am Stamm des R). Die Texte der Website bleiben in Cormorant Garamond + Karla – Perpetua/Gill Sans sind nicht als Webschrift lizenziert. Quelle aller
 Dateien ist das Branding-Kit in `1! claude/04 Templates/Branding/Renate Leeb/`.
 
 - `assets/brand/` – Logo im Kopf (`renate-leeb-logo-quer-hell.svg`, Schrift in Pfaden) und Signet

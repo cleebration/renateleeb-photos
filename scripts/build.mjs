@@ -42,7 +42,7 @@ function masthead(current) {
     return `<a href="${esc(n.href)}"${attrs}>${esc(n.label)}</a>`;
   }).join("\n        ");
   return `<header class="mast"><div class="wrap mast-row">
-      <a class="brand" href="/"><img src="/assets/brand/renate-leeb-logo-quer-hell.svg" width="280" height="64" alt="Renate Leeb — Fotografie"></a>
+      <a class="brand" href="/"><img src="/assets/brand/renate-leeb-logo-quer-hell.svg" width="288" height="64" alt="Renate Leeb — Fotografie"></a>
       <input type="checkbox" id="navtoggle" class="nav-toggle" aria-label="Menü öffnen oder schließen">
       <label for="navtoggle" class="nav-burger" aria-hidden="true"><span></span><span></span><span></span></label>
       <nav class="mast-nav">
