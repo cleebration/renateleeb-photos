@@ -51,6 +51,14 @@ function masthead(current) {
     </div></header>`;
 }
 
+// Newsletter „Neues von Renate & Chris“: zentraler Baustein newsletter.cleebration.com (Schlüssel „renateleeb“),
+// Liste „Renate & Chris“ in EmailOctopus. Texte/Farben in cleebration-web/newsletter-hub/worker/sites.config.mjs.
+const NEWSLETTER = `
+  <section class="newsletter">
+    <script type="module" src="https://newsletter.cleebration.com/widget.js"></script>
+    <newsletter-signup site="renateleeb"></newsletter-signup>
+  </section>`;
+
 function footer() {
   const year = new Date().getFullYear();
   return `<footer class="site"><div class="wrap frow">
@@ -185,6 +193,7 @@ function startseite(items) {
       </a>
     </div>
   </section>
+  ${NEWSLETTER}
 </div>`,
   });
 }
@@ -233,6 +242,7 @@ function wasichmache() {
   <section class="gemeinsam">
     <gallery-grid feed="${esc(site.sharedFeed)}" gallery="gemeinsam" teaser="on" link-mode="direct"></gallery-grid>
   </section>
+  ${NEWSLETTER}
 </div>`,
   });
 }
@@ -428,6 +438,17 @@ function datenschutz() {
       unserem E-Mail-Postfach bei Google Workspace (Google Ireland Limited). Die Daten werden
       gelöscht, sobald sie nicht mehr benötigt werden. Dasselbe gilt für Anfragen, die du direkt
       per E-Mail schickst.</p>
+
+    <h3>6a. Newsletter</h3>
+    <p>Für den Newsletter „Neues von Renate &amp; Chris“ verarbeiten wir deine E-Mail-Adresse, den
+      Anmeldezeitpunkt und die Website, über die du dich angemeldet hast. Die Anmeldung erfolgt im
+      Double-Opt-in-Verfahren: Nach dem Absenden bekommst du eine Bestätigungs-E-Mail, erst nach deiner
+      Bestätigung wirst du aufgenommen. Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO);
+      du kannst sie jederzeit über den Abmeldelink in jeder E-Mail oder formlos per E-Mail widerrufen.</p>
+    <p>Das Anmeldeformular wird von newsletter.cleebration.com geladen (unser eigener Dienst, ebenfalls über
+      Cloudflare ausgeliefert) und übermittelt die Angaben an EmailOctopus. Versanddienstleister ist
+      EmailOctopus (Three Hearts Digital Ltd, 86–90 Paul Street, London EC2A 4NE, Vereinigtes Königreich)
+      als Auftragsverarbeiter; die Empfängerdaten werden auf Servern in Irland gespeichert.</p>
 
     <h3>7. Externe Links &amp; Social Media</h3>
     <p>Diese Website verlinkt auf externe Seiten (Facebook, X, renateundchris.com, cleebration.com, cleebration.food, cantalentia.at).

@@ -259,3 +259,7 @@ footer.site nav { display: flex; gap: 16px; flex-wrap: wrap; }
   --gal-text: var(--ink); --gal-muted: var(--muted); --gal-accent: var(--accent-ink);
   --gal-border: var(--line); --gal-aspect: 3 / 2; --gal-tile: 260px; --gal-gap: 18px;
 }
+
+/* Newsletter „Neues von Renate & Chris“ (<newsletter-signup>, Shadow DOM, Farben aus dem newsletter-hub) */
+.newsletter { margin: 64px 0 24px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-2); }
+@media (max-width: 560px) { .newsletter { padding: 22px 16px; } }
