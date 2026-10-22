@@ -29,6 +29,7 @@ const NAV = [
   { href: "/kuenstlernatur/", label: "Künstlernatur" },
   { href: "/was-ich-mache/", label: "Was ich mache" },
   { href: "/ueber-mich/", label: "Über mich" },
+  { href: "/newsletter/", label: "Newsletter" },
   { href: "/kontakt/", label: "Kontakt" },
 ];
 
@@ -269,6 +270,24 @@ function uebermich() {
     </div>
   </section>
 </div>`,
+  });
+}
+
+// Eigene Seite für den Menüpunkt „Newsletter“ (Formular = zentraler Baustein, siehe NEWSLETTER)
+function newsletterseite() {
+  return page({
+    url: "/newsletter/",
+    title: "Newsletter",
+    description: "Neues von Renate & Chris – Bücher, Reisen, Fotos per E-Mail.",
+    body: `
+<div class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Newsletter</p>
+    <h1>Neues von <em>Renate &amp; Chris</em></h1>
+    <p class="lede">Wenn neue Fotos, ein neues Buch oder eine neue Reise dazukommen, schreiben wir dir – selten, kein Spam, jederzeit abbestellbar.</p>
+  </section>
+</div>
+${NEWSLETTER}`,
   });
 }
 
@@ -514,6 +533,7 @@ write("/", startseite(items));
 write("/kuenstlernatur/", galerieseite());
 write("/was-ich-mache/", wasichmache());
 write("/ueber-mich/", uebermich());
+write("/newsletter/", newsletterseite());
 write("/kontakt/", kontaktseite());
 write("/impressum/", impressum());
 write("/datenschutz/", datenschutz());
@@ -535,7 +555,7 @@ const nMedia = copyDir(path.join(HUB_PUBLIC, "media"), path.join(DIST, "media"))
 // Bewusst nicht im Menü und nicht in der Sitemap (noindex im Kopf der Seite).
 const nUnterricht = copyDir(path.join(ROOT, "unterricht"), path.join(DIST, "unterricht"));
 
-const urls = ["/", "/kuenstlernatur/", "/was-ich-mache/", "/ueber-mich/", "/kontakt/", "/impressum/", "/datenschutz/"];
+const urls = ["/", "/kuenstlernatur/", "/was-ich-mache/", "/ueber-mich/", "/newsletter/", "/kontakt/", "/impressum/", "/datenschutz/"];
 fs.writeFileSync(path.join(DIST, "sitemap.xml"), sitemap(urls), "utf8");
 fs.writeFileSync(
   path.join(DIST, "robots.txt"),

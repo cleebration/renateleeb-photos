@@ -25,7 +25,7 @@ const dom = (p) => new JSDOM(read(p)).window.document;
 // --- 1. Alle Seiten da -----------------------------------------------------
 const seiten = [
   "index.html", "kuenstlernatur/index.html", "ueber-mich/index.html",
-  "kontakt/index.html", "impressum/index.html", "datenschutz/index.html", "404.html",
+  "newsletter/index.html", "kontakt/index.html", "impressum/index.html", "datenschutz/index.html", "404.html",
 ];
 for (const s of seiten) check(`Seite ${s} gebaut`, fs.existsSync(path.join(DIST, s)));
 check("sitemap.xml gebaut", fs.existsSync(path.join(DIST, "sitemap.xml")));
