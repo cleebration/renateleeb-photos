@@ -30,7 +30,6 @@ const NAV = [
   { href: "/was-ich-mache/", label: "Was ich mache" },
   { href: "/ueber-mich/", label: "Über mich" },
   { href: "/newsletter/", label: "Newsletter" },
-  { href: "/kontakt/", label: "Kontakt" },
 ];
 
 function masthead(current) {
@@ -60,15 +59,31 @@ const NEWSLETTER = `
     <newsletter-signup site="renateleeb"></newsletter-signup>
   </section>`;
 
+// Social-Media-Symbole in der Fußzeile (Reihenfolge hier; leere Adressen in site.config.mjs entfallen)
+const SOCIAL_ICONS = {
+  instagram: ["Instagram", '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>'],
+  pinterest: ["Pinterest", '<circle cx="12" cy="12" r="9"/><path d="M11 8.5c2.6-.6 4.6.9 4.4 3.2-.2 2.2-1.8 3.4-3.3 3.1-1-.2-1.5-1-1.4-1.8M11.6 10.5 9.5 19.5"/>'],
+  facebook: ["Facebook", '<path d="M14 8h2.5V4.5H14c-2.2 0-3.5 1.5-3.5 3.6V10H8v3.5h2.5V20H14v-6.5h2.5L17 10h-3V8.6c0-.4.3-.6.6-.6z"/>'],
+  x: ["X", '<path d="M4 4l16 16M20 4 4 20"/>'],
+};
+function socialLinks() {
+  return Object.entries(SOCIAL_ICONS)
+    .filter(([k]) => site.social[k])
+    .map(([k, [label, svg]]) => `<a href="${esc(site.social[k])}" target="_blank" rel="noopener" aria-label="${label}" title="${label}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${svg}</svg></a>`)
+    .join("\n        ");
+}
+
 function footer() {
   const year = new Date().getFullYear();
   return `<footer class="site"><div class="wrap frow">
       <span>© ${year} ${esc(site.author.name)} — Fotografie. Alle Rechte vorbehalten.</span>
       <nav>
+        <a href="/kontakt/">Kontakt</a>
         <a href="/impressum/">Impressum</a>
         <a href="/datenschutz/">Datenschutz</a>
-        <a href="${esc(site.social.facebook)}" target="_blank" rel="noopener">Facebook</a>
-        <a href="${esc(site.social.x)}" target="_blank" rel="noopener">X</a>
+      </nav>
+      <nav class="social" aria-label="Social Media">
+        ${socialLinks()}
       </nav>
       <span class="credit">${esc(site.credit.text)}
         <a href="${esc(site.credit.url)}" target="_blank" rel="noopener">${esc(site.credit.label)}</a>
@@ -459,7 +474,8 @@ function datenschutz() {
       per E-Mail schickst.</p>
 
     <h3>6a. Newsletter</h3>
-    <p>Für den Newsletter „Neues von Renate &amp; Chris“ verarbeiten wir deine E-Mail-Adresse, den
+    <p>Für den Newsletter „Neues von Renate &amp; Chris“ verarbeiten wir deine E-Mail-Adresse, freiwillig deinen
+      Vornamen und die angekreuzten Themen (für eine persönliche Anrede und Zusendungen nach Interesse), den
       Anmeldezeitpunkt und die Website, über die du dich angemeldet hast. Die Anmeldung erfolgt im
       Double-Opt-in-Verfahren: Nach dem Absenden bekommst du eine Bestätigungs-E-Mail, erst nach deiner
       Bestätigung wirst du aufgenommen. Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO);

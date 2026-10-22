@@ -236,6 +236,9 @@ footer.site .frow { display: flex; gap: 18px; flex-wrap: wrap; justify-content: 
 footer.site a { color: var(--muted); text-decoration: none; }
 footer.site a:hover { color: var(--ink); }
 footer.site nav { display: flex; gap: 16px; flex-wrap: wrap; }
+footer.site nav.social { gap: 14px; align-items: center; }
+footer.site nav.social a { display: inline-flex; padding: 4px; color: var(--ink); }
+footer.site nav.social a:hover { color: var(--accent, var(--ink)); }
 .credit { display: inline-flex; align-items: center; gap: 6px; }
 
 @media (max-width: 760px) {

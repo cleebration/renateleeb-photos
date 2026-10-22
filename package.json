@@ -11,7 +11,8 @@
     "dev": "npm run build && npx serve dist",
     "deploy": "npm run build && npx wrangler deploy",
     "preview": "npm run build && node scripts/build-preview.mjs",
-    "test": "node test/smoke.mjs && node test/galerie.mjs"
+    "test": "node test/smoke.mjs && node test/galerie.mjs",
+    "ig": "node scripts/ig-bilder.mjs"
   },
   "engines": {
     "node": ">=18"

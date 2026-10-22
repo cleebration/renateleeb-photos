@@ -32,6 +32,9 @@ export default {
   social: {
     facebook: "https://www.facebook.com/renatephotos",
     x: "https://x.com/RenatePhotos",
+    // Leer = wird in der Fußzeile nicht angezeigt. Adresse eintragen, sobald von Chris bestätigt.
+    instagram: "https://www.instagram.com/renate.leeb.photos/",
+    pinterest: "https://at.pinterest.com/renatephotos/",
   },
 
   // Kanonische Buchseiten liegen auf renateundchris.com (kein Duplicate Content)
